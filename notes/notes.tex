@@ -1,0 +1,481 @@
+% Created 2017-05-08 Mon 16:22
+% Intended LaTeX compiler: pdflatex
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=1.0in]{geometry}
+\documentclass{article}
+\usepackage{setspace,mathrsfs,amsmath,amsthm,amssymb,graphicx,cancel,lmodern,mathtools}
+\author{Justen Rickert}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Justen Rickert},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.0.50.1 (Org mode 9.0.5)}, 
+ pdflang={English}}
+\begin{document}
+
+\newcommand\abs[1]{\left|#1\right|}
+\newcommand\deg{\textdegree}
+\newcommand\Real{\mathbb{R}}
+\newcommand\Natural{\mathbb{N}}
+\newcommand\sube{\subseteq}
+\newcommand\supe{\supseteq}
+\newcommand\sub{\subset}
+\newcommand\sup{\supset}
+\newcommand\setm{\setminus}
+\newcommand\pr{\ensuremath{'}}
+\newcommand\R{\mathcal{R}}
+\newcommand\calR{\mathcal{R}}
+\newcommand\calP{\mathcal{P}}
+\newcommand\pow{\mathscr{P}}
+\newcommand\indX{\mathscr{X}}
+\newcommand\nil{\varnothing}
+
+\newtheorem{lemma}[Theorem]{lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Def}[section]
+
+\section{Chapter One}
+\label{sec:org39ce2ba}
+\subsection{Automaton}
+\label{sec:org9cc5937}
+\begin{definition}[Finite Automaton]
+  A \textit{\textbf{finite automaton}} is a 5-tuple $(Q,\Sigma,\delta,q_0,F)$,
+  where:
+  \begin{enumerate}
+  \item $Q$ is a finite set called the \textit{\textbf{states}},
+  \item $\Sigma$ is a finite set called the \textit{\textbf{alphabet}},
+  \item $\delta$: $Q\times\Sigma\longrightarrow Q$ is the
+    $\textit{\textbf{transition function}}$,
+  \item $q_0\in Q$ is the \textit{\textbf{start state}}, and
+  \item $F\subseteq Q$ is the \textit{\textbf{set of accept states}}.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[Nondeterministic Finite Automaton]
+  A \textit{\textbf{nondeterministic finite automaton}} is a 5-tuple
+  $(Q,\Sigma,\delta,q_0,F)$, where:
+  \begin{enumerate}
+  \item $Q$ is a finite set called the \textit{\textbf{states}},
+  \item $\Sigma$ is a finite set called the \textit{\textbf{alphabet}},
+  \item $\delta$: $Q\times\Sigma\longrightarrow \pow(Q)$ is the
+    $\textit{\textbf{transition function}}$,
+  \item $q_0\in Q$ is the \textit{\textbf{start state}}, and
+  \item $F\subseteq Q$ is the \textit{\textbf{set of accept states}}.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[Generalized Nondeterministic Finite Automaton]
+  A \textit{\textbf{generalized nondeterministic finite automaton}} is a
+  5-tuple $(Q,\Sigma,\delta,q_0,F)$, where:
+  \begin{enumerate}
+  \item $Q$ is a finite set called the \textit{\textbf{states}},
+  \item $\Sigma$ is the \textit{\textbf{input alphabet}},
+  \item $\delta : (Q-\{q_{accept}\}) \times (Q-\{q_{start}\}) \longrightarrow
+    \R$ is the $\textit{\textbf{transition function}}$,
+  \item $q_{start}$ is the \textit{\textbf{start state}}, and
+  \item $q_{accept}$ is the \textit{\textbf{accept state}}.
+  \end{enumerate}
+  The symbol $\R$ is the collection of all regular expressions over the
+  alphabet $\Sigma$, and $q_{start}$ and $q_{accept}$ are the start and
+  accept states. If $\delta(q_i,q_j)=R$, the arrow from state $q_i$ to state
+  $q_j$ has the regular expression $R$ as its label. The domain of the
+  transitition function is $(Q-\{q_{accept}\})\times(Q-\{q_{start}\})$
+  because an arrow connects every state to every other state, except that no
+  arrows are coming from $q_{accept}$ or going to $q_{start}$.
+\end{definition}
+
+\subsection{Computation}
+\label{sec:orgf13c091}
+\begin{definition}[Computation]
+  Let $M=(Q,\Sigma,\delta,q_0,F)$ be a finite automaton and let $w=w_1w_2\dots
+  w_n$ be a string where each $w_i$ is a member of the alphabet $\Sigma$. Then
+  $M$ accepts $w$ if a sequence of states $r_0,r_1,\dots,r_n\in Q$ exists with
+  three conditions:
+  \begin{enumerate}
+  \item $r_{0}=q_{0}$,
+  \item $\delta(r_i,w_{i+1})=r_{i+1}$, for $i=0,\dots,n-1$, and
+  \item $r_n\in F$.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[recognizes]
+  $M$ \textit{\textbf{recognizes language}} $A$ if $A=\{w : M \text{ accepts }
+  w\}$.
+\end{definition}
+
+\subsection{Regular}
+\label{sec:orgae52da3}
+\begin{definition}[Regular]
+  A language is called a \textit{\textbf{regular language}} if some finite
+  automaton recognizes it.
+\end{definition}
+
+\begin{definition}[Regular Operations]
+  Let $A$ and $B$ be languages. We define the regular operations
+  \textit{\textbf{union}}, \textit{\textbf{concatenation}} and
+  \textit{\textbf{star}} as follows:
+  \begin{itemize}
+    \item \textbf{Union}: $A \cup B=\{x : x\in A \text{ or } x\in B\}$.
+    \item \textbf{Concatenation}: $A \circ B=\{xy : x\in A \text{ and } y\in
+    B\}$.
+    \item \textbf{Star}: $A^*=\{x_1x_2\dots x_k : k\ge0 \text{ and each }
+    x_i\in A\}$
+  \end{itemize}
+  In arithmetic, we say that $\times$ has precedence over over + to mean that
+  when there is a choice, we do the $\times$ operation first. Thus in
+  $2+3\times4$, the $3\times4$ is done before the addition. To have the
+  addition done first, we must add paretheses to to obtain $(2+3)\times4$. In
+  regular expressions, the star operation is done first, followed by
+  concatenation, and finally union, unless parentheses change the usual
+  order.
+\end{definition}
+
+\begin{definition}[Regular Operations]
+  Say that $R$ is a {\textit{\textbfregular expression}} if $R$ is:
+  \begin{enumerate}
+    \item $a$ for some $A$ in the alphabet $\Sigma$,
+    \item $\varepsilon$,
+    \item $\varnothing$,
+    \item $(R_1 \cup R_2)$, where $R_1$ and $R_2$ are regular expressions,
+    \item $(R_1 \circ R_2)$, where $R_1$ and $R_2$ are regular expressions, or
+    \item $(R_1^*)$, where $R_1$ is a regular expression.
+  \end{enumerate}
+  In items 1 and 2, the regular expressions $A$ and $\varepsilon$ represent the
+  languages $\{a\}$ and $\{\varepsilon\}$, respectively. In item 3, the regular
+  expression $\varnothing$ represents the empty language. In items 4, 5, and 6,
+  the expressions represent the languages obtained by taking the union or
+  concatenation of the languages $R_1$ and $R_2$, or the star of the language
+  $R_1$, respectively.
+\end{definition}
+
+\begin{definition}[Equivalence With Finite Automata]
+  \label{Equivalence With Finite Automata}
+  A language is \textit{\textbf{regular}} if and only if some regular expression
+  describes it.
+\end{definition}
+
+\begin{definition}{Equivalence With Regular Expressions}
+  \textbf{Def \ref{Equivalence With Finite Automata}} means as well that if
+  a language is described by a $\textit{\textbf{regular expression}}$, then
+  it is $\textit{\textbf{regular}}$.
+\end{definition}
+
+\subsection{Nonregular Languages}
+\label{sec:org6584c3b}
+\begin{definition}[Puming Lemma]
+  If $A$  is a  regular language,  then there  is a  number $p$  (the pumping
+  length) where if  s is any string in  $A$ of length at least  $p$, then $s$
+  may  be  divided  into  three pieces,  $s=xyz$,  satisfying  the  following
+  conditions:
+  \begin{enumerate}
+    \item for each $i \ge 0$, $xy^iz \in A$,
+    \item $\abs{y} > 0$, and 
+    \item $\abs{xy} \le p$.
+  \end{enumerate}
+\end{definition}
+
+\section{Chapter Two}
+\label{sec:org6fb53e9}
+\subsection{Context-Free Grammar}
+\label{sec:org2e2f0d1}
+\begin{definition}[Context-Free Grammar]
+  A \textit{\textbf{context-free grammar}} is a 4-tuple $(V,\Sigma,R,S)$,
+  where :---
+  \begin{enumerate}
+  \item $V$ is a finite set called the \textit{\textbf{variable}},
+  \item $\Sigma$ is a finite set, disjoint from $V$, called the
+    \textit{\textbf{terminals}},
+  \item $R$ is a finite set of \textit{\textbf{rules}}, with each rule being a
+    variable and a string of variables and terminals, and
+  \item $S \in V$ is the start variable.
+  \end{enumerate}
+  The \textit{\textbf{language of the grammar}} is $\{w\in\Sigma^* : S
+  \xRightarrow[]{\text{*}} w\}$. That is, say that $u$
+  \textit{\textbf{derives}} $v$, written $u \xRightarrow[]{\text{*}} v$, if
+  $u=v$ or if a sequence $u_1,u_2,\dots,u_k$ exists for $k\ge0$ and
+  $$u\Rightarrow u_1 \Rightarrow u_2 \Rightarrow \dots \Rightarrow u_k
+  \Rightarrow v.$$
+\end{definition}
+
+\begin{definition}[Chomsky Normal Form]
+  A context-free grammar is in Chomsky normal form if every rule is of the
+  form :---
+  \begin{center}
+    \begin{tabular}{l}
+      $A \rightarrow BC$ \\
+      $A \rightarrow a$ \\
+    \end{tabular}
+  \end{center}
+  where $a$ is any terminal and $A$, $B$, and $C$ are any variable---except
+  that $B$ and $C$ may not be the start variable. In addition, we permit the
+  Rule $S \rightarrow \varepsilon$, where $S$ is the start variable.
+\end{definition}
+
+\subsection{Pushdown Automata}
+\label{sec:orgdcf66e8}
+\begin{definition}[Pushdown Automaton]
+  A \textit{\textbf{pusdown automaton}} is a 6-tuple
+  $(Q,\Sigma,\Gamma,\delta,q_0,F)$, where $Q$, $\Sigma$, $\Gamma$, and $F$
+  are all finite sets, and :---
+  \begin{enumerate}
+  \item $Q$ is the set of states,
+  \item $\Sigma$ is the input alphabet,
+  \item $\Gamma$ is the stack alphabet,
+  \item $\delta : Q\times\Sigma_\varepsilon\times\Gamma_\varepsilon
+    \longrightarrow \calP(Q\times\Gamma_\varepsilon)$ is the transition function,
+  \item $q_0 \in Q$ is the start state, and
+  \item $F \sube Q$ is the set of accept states.
+  \end{enumerate}
+  Recall that $\Sigma_\varepsilon=\Sigma\cup\{\varepsilon\}$ and
+  $\Gamma_\varepsilon=\Gamma\cup\{\varepsilon\}$. The domain of the transition
+  function is $Q\times\Sigma_\varepsilon\times\Gamma_\varepsilon$. Thus the
+  current state, next input symbol read, and top symbol of the stack determine
+  the next move of a pushdown automaton.
+\end{definition}
+
+\begin{definition}[Equivalence With Context-Free Grammar]
+  A language is context free if and only if some pushdown automaton recognizes
+  it. If a language is context free, then some pushdown automaton recognizes
+  it.
+\end{definition}
+
+\section{Chapter Three}
+\label{sec:orgeec4b9d}
+\subsection{Turing Machine}
+\label{sec:orgaeaab3d}
+\begin{definition}[Turing Machine]
+  A  \textit{\textbf{Turing  machine}}  is  a  7-tuple  $(Q,  \Sigma,  \Gamma,  \delta,  q_0,
+  q_{accepts}, q_{reject})$, where $Q, \Sigma, \Gamma$ are all finite sets and
+  \begin{enumerate}
+  \item $Q$ is the set of states,
+  \item $\Sigma$ is the input alphabet not containing the blank symbol $\_$,
+  \item $\Gamma$ is the tap alphabet, where $\_ \in \Gamma$ and $\Sigma \sube \Gamma$,
+  \item $\delta : Q \times \Gamma \longrightarrow Q \times  \Gamma \times \{ $L$, $R$ \}$ is the transition
+    function,
+  \item $q_0 \in Q$ is the start state,
+  \item $q_{accept} \in Q$ is the accept state, and
+  \item $q_{reject} \in Q$ is the reject state, where $q_{reject} \ne q_{accept}$.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[Multitape Turing Machine]
+  The  only difference  is that  $$\delta :  Q  \times \Gamma^k  \longrightarrow Q  \times \Gamma^k  \times
+  \{\text{L}, \text{R}, \text{S}\}^k,$$ where $k$ is the number of tapes. The
+  expression  $$\delta(q_i,  a_1  ...,  a_k)  = (q_j,  b_1,  ...,  b_k,  \text{L},
+  \text{R}, ..., \text{L})$$ means that if  the machine is in state $q_i$ and
+  heads $1$ through $k$ are reading  symbols $a_1$ through $a_k$, the machine
+  goes to state  $q_j$, writes symbols $b_1$ through $b_k$,  and directs each
+  head to mave left or right, or to stay put, as specified.
+\end{definition}
+
+
+\begin{definition}[Nondeterministic Turing Machine]
+  The  only difference  is that  $$\delta :  Q \times  \Gamma \longrightarrow  \pow(Q \times  \Gamma \times
+  \{\text{L},  \text{R}\}).$$  All  of  the  nondeterministic  paths  can  be
+  simulated on a multitape Turing Machine.
+\end{definition}
+
+\phantomsection
+\label{orgf2f8120}
+\begin{itemize}
+\item \emph{\textbf{start configuration}}
+\item \emph{\textbf{accepting configuration}}
+\item \emph{\textbf{rejecting configuration}}
+\item \emph{\textbf{halting configuration}}
+\end{itemize}
+
+\phantomsection
+\label{org6b51766}
+\begin{itemize}
+\item Call a language \emph{\textbf{Turing-recognizable}} if some Turing machine recognizes
+it. (\emph{\textbf{recursively enumerable language}})
+\begin{itemize}
+\item A language is Turing-recognizable \(\iff\) some enumerator enumerates it.
+\end{itemize}
+
+\item Call a language \emph{\textbf{Turing-decidable}} or simply decidable if some Turing
+machine decides it. (\emph{\textbf{recursive language}})
+\begin{itemize}
+\item A language is decidable \(\iff\) some nondeterministic Turing machine
+decides it.
+\end{itemize}
+\end{itemize}
+
+\section{Chapter Four}
+\label{sec:orgf72244e}
+\subsection{Decidable}
+\label{sec:orgd05dfc7}
+\begin{itemize}
+\item \(A_{DFA}=\{\langle B,w \rangle : B \text{ is a DFA that accepts input string }
+   w\}\) is a \uline{decidable language}.
+\begin{itemize}
+\item \(M=\) "On input \(\lang B,w \rang\):
+\begin{enumerate}
+\item Simulate \(B\) on input \(w\).
+\item If the simulation ends in an accept state, \emph{accept}. If it ends in a
+nonaccepting state, \emph{reject}"
+\end{enumerate}
+\end{itemize}
+
+\item \(A_{NFA}=\{\langle{}B,w\rangle : B \text{ is an NFA that accepts input
+   string } w\}\) is a \uline{decidable language}.
+\begin{itemize}
+\item \(N=\) "On input \(\langle B,w \rangle\):
+\begin{enumerate}
+\item Convert NFA \(B\) to an equivalent DFA \(C\), using the procedure for this
+conversion given in Theorem 1.39.
+\item Run TM \(M\) from Theorem 4.1 on input \(\langle C,w \rangle\).
+\item If \(M\) accepts, \emph{accept}; otherwise, \emph{reject}."
+\end{enumerate}
+\end{itemize}
+
+\item \(A_{REX}=\{\langle{}R,w\rangle : R \text{ is a regular expression that
+   generates string } w\}\) is a \uline{decidable language}.
+\begin{itemize}
+\item \(P=\) "On input \(\langle R,w \rangle\):
+\begin{enumerate}
+\item Convert regular expression \(R\) to an equivalent NFA \(A\) be using the
+procedure for this conversion given in Theorem 1.54.
+\item Run TM \(N\) on input \(\langle{}A,w\rangle\).
+\item If \(N\) accepts, \emph{accept}; if \(N\) rejects, \emph{reject}."
+\end{enumerate}
+\end{itemize}
+
+\item \(E_{DFA}=\{\langle A\rangle : A \text{ is a DFA and } L(A)=\varnothing\}\)
+is a \uline{decidable language}.
+\begin{itemize}
+\item \(T=\) "On input \(\langle A \rangle\):
+\begin{enumerate}
+\item Mark the start state of \(A\).
+\item Repeat until no new states get marked:
+\begin{enumerate}
+\item Mark any state that has a transition coming into it from any state that
+is already marked.
+\end{enumerate}
+\item If no accept state is marked, \emph{accept}; otherwise, \emph{reject}."
+\end{enumerate}
+\end{itemize}
+
+\item \(EQ_{DFA}=\{\langle A,B \rangle : A \text{ and } B \text{ are DFAs and }
+   L(A)=L(B)\}\) is a \uline{decidable language}.
+\begin{itemize}
+\item This new DFA \(C\) accepts only those strings that are accepted by either \(A\)
+or \(B\) but not by both. Thus, if \(A\) and \(B\) recognize the same language,
+\(C\) will accept nothing.
+$$L(C)=\left(L(A) \cap \overline{L(B)}\right) \cup
+     \left(\overline{L(A)} \cap L(B)\right)$$
+\item \(F=\) "On input \(\langle{}A,B\rangle\):
+\begin{enumerate}
+\item Construct DFA \(C\) as described.
+\item Run TM \(T\) from Theorem 4.4 on input \(\langle{}C\rangle\).
+\item If \(T\) accepts, \emph{accept}. If \(T\) rejects, \emph{reject}."
+\end{enumerate}
+\end{itemize}
+
+\item \(A_{CFG}=\{\langle{}G,w\rangle : G \text{ is a CFG that generates string }
+   w\}\) is a \uline{decidable language}.
+
+\item \(E_{CFG}=\{\langle{}G\rangle : G \text{ is a CFG and } L(G)=\varnothing\}\)
+is a \uline{decidable language}.
+\end{itemize}
+
+\subsection{Undecidable}
+\label{sec:orgba64b64}
+\begin{itemize}
+\item \(A_{TM}=\{\langle{}M,w\rangle : M \text{ is a TM and } M \text{ accepts }
+   w\}\) is an \uline{undecidable language}. It is also \uline{Turing-recognizable}. recognizers
+\emph{are} more powerful than deciders. \(U\) recognizes \(A_{TM}\), it is the universal
+Turing machine capable of simulating every other Turing machine. 
+\begin{itemize}
+\item \(U=\) "On input \(\langle{}M,w\rangle\):
+\begin{enumerate}
+\item Simulate \(M\) on input \(w\).
+\item If \(M\) ever enters its accept state, \emph{accept}; if \(M\) ever enters its
+reject state, \emph{rejects}."
+\end{enumerate}
+\item The proof of this relies on a technique called \emph{diagonalization}.
+\end{itemize}
+
+\item \(HALT_{TM}=\{\langle M,w \rangle : M \text{ is a TM and } M \text{ accepts } w\}\) is an
+\uline{undecidable language}. It is also \uline{Turing-recognizable}. Let's assume for
+the purpose of obtaining a contradiction that TM \(R\) decides /HALT/\(_{\text{TM}}\)
+\begin{itemize}
+\item \(U=\) "On input \(\langle M, w \rangle\), an encoding of a TM \(M\) and
+a string \(w\):
+\begin{enumerate}
+\item Run TM \(R\) on input \(\langle M,w \rangle\).
+\item If \(R\) rejects, \emph{reject}.
+\item If \(R\) accepts, simulate \(M\) on \(w\) until it halts.
+\item If \(M\) has accepted, \emph{accept}; if \(M\) has rejected, \emph{reject}."
+\end{enumerate}
+\item Clearly, if \(R\) decides HALT\(_{\text{TM}}\), then \(S\) decides A\(_{\text{TM}}\). Because A\(_{\text{TM}}\).
+Because A\(_{\text{TM}}\) is undecidable, HALT\(_{\text{TM}}\) also must be undecidable.
+\end{itemize}
+\end{itemize}
+
+\section{Chapter Five}
+\label{sec:orgdedf500}
+\subsection{Reducible}
+\label{sec:org7620c09}
+\begin{definition}[Computation History]
+  Let $M$  be a Turing  Machine and $w$  an input string.  An \textbf{accepting
+    computation history} for $M$ on $w$  is a sequence of configurations, $C_1,
+    C_2, ..., C_l$, where $C_1$ is the start configuration of $M$ on $w$, $C_l$
+    is  an  accepting configuration  of  $M$  on  $w$,  $C_l$ is  an  accepting
+    configuration  of $M$,  and  each $C_i$  legally follows  from  $C_{i -  1}
+    $according to  the rules of  $M$. A \textbf{rejecting  computation history}
+    for  $M$ on  $w$ is  defined similarly,  except that  $C_l$ is  a rejecting
+    configuration.
+
+\end{definition}
+
+\begin{definition}[Linear Bounded Automaton]
+  A \textbf{linear  bounded automaton}  is a restricted  type of  Turing machine
+  wherein the  tape head  isn't permitted to  move off the  portion of  the tape
+  containing the input. If the machine tries  to move its head off either end of
+  the input, the head stays where it is---in the same way that the head will not
+  move off the left-hand end of an ordinary Turing machine's tape.
+\end{definition}
+
+\begin{lemma}
+  Let $M$ be an LBA with $q$ states  and $g$ symbols in the tape alphabet. There
+  are exactly $qng^n$  distinct configurations of $M$ for a  tape of length $n$.
+  \end{lemma} 
+
+\begin{itemize}
+\item \(A_{LBA}\) is  \uline{decidable}. \(E_{LBA}\) is  \uline{undecidable}. \(E_{LBA} = \{  \langle M
+   \rangle \mid M\) is an LBA and \(L(M) = \varnothing \}\)
+
+\item ALL\(_{\text{CFG}}\) is \uline{undecidable}. \(ALL_{CFG} = \{ \langle G \rangle \mid G\) is a CFG
+and \(L(G) = \Sigma^* \}\)
+\end{itemize}
+
+\begin{definition}[Computable Function]
+  A function  $f : \Sigma^*  \longrightarrow \Sigma^*$ is  a \textbf{computable
+  function} if  some Turing machine  $M$, on every  input $w$, halts  with just
+  $f(w)$ on its tape.
+\end{definition}
+
+\begin{definition}[Mapping Reducible, Reduction]
+  Language $A$ is \textbf{mapping reducible}  to language $B$, written $A \le_m
+  B$,  if  there  is  a  computable  function  $f  :  \Sigma^*  \longrightarrow
+  \Sigma^*$, where for every $w$, $$w \in A \iff f(w) \in B.$$ The function $f$
+  is called the \textbf{reduction} from $A$ to $B$.
+\end{definition}
+\end{document}
